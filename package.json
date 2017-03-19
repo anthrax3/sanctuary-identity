@@ -1,0 +1,13 @@
+{
+  "name": "sanctuary-identity",
+  "version": "0.0.0",
+  "scripts": {
+    "test": "make lint test"
+  },
+  "dependencies": {
+    "sanctuary-type-classes": "3.0.x"
+  },
+  "devDependencies": {
+    "xyz": "2.1.x"
+  }
+}
