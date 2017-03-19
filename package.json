@@ -1,6 +1,12 @@
 {
   "name": "sanctuary-identity",
   "version": "0.0.0",
+  "description": "Fantasy Land -compliant Identity type",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/sanctuary-js/sanctuary-identity.git"
+  },
   "scripts": {
     "test": "make lint test"
   },
