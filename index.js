@@ -1,3 +1,39 @@
+/*             ___________________
+              /                  /\
+             /                  /  \
+            /_____       ______/   /
+            \    /      /\     \  /
+             \__/      /  \_____\/
+               /      /   /
+              /      /   /
+       ______/      /___/_
+      /                  /\
+     /                  /  \
+    /__________________/   /
+    \                  \  /
+     \__________________*/
+
+//. # sanctuary-identity
+//.
+//. Identity is the simplest container type: a value of type `Identity a`
+//. always contains exactly one value, of type `a`.
+//.
+//. `Identity a` satisfies the following [Fantasy Land][] specifications:
+//.
+//.   - [Setoid][] (if `a` satisfies Setoid)
+//.   - [Ord][] (if `a` satisfies Ord)
+//.   - [Semigroup][] (if `a` satisfies Semigroup)
+//.   - [Functor][]
+//.   - [Apply][]
+//.   - [Applicative][]
+//.   - [Chain][]
+//.   - [Monad][]
+//.   - [Alt][] (if `a` satisfies Alt)
+//.   - [Foldable][]
+//.   - [Traversable][]
+//.   - [Extend][]
+//.   - [Extract][]
+
 (function(f) {
 
   'use strict';
@@ -182,3 +218,18 @@
   return Identity;
 
 }));
+
+//. [Alt]:              v:fantasyland/fantasy-land#alt
+//. [Applicative]:      v:fantasyland/fantasy-land#applicative
+//. [Apply]:            v:fantasyland/fantasy-land#apply
+//. [Chain]:            v:fantasyland/fantasy-land#chain
+//. [Extend]:           v:fantasyland/fantasy-land#extend
+//. [Extract]:          v:fantasyland/fantasy-land#extract
+//. [Fantasy Land]:     v:fantasyland/fantasy-land
+//. [Foldable]:         v:fantasyland/fantasy-land#foldable
+//. [Functor]:          v:fantasyland/fantasy-land#functor
+//. [Monad]:            v:fantasyland/fantasy-land#monad
+//. [Ord]:              v:fantasyland/fantasy-land#ord
+//. [Semigroup]:        v:fantasyland/fantasy-land#semigroup
+//. [Setoid]:           v:fantasyland/fantasy-land#setoid
+//. [Traversable]:      v:fantasyland/fantasy-land#traversable
