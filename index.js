@@ -15,74 +15,165 @@
 
   'use strict';
 
+  //  lte :: Ord a => (a, a) -> Boolean
+  Z.lte = function(a, b) {
+    return typeof a['fantasy-land/lte'] === 'function' ?
+      a['fantasy-land/lte'](b) :
+      a <= b;
+  };
+
   //# Identity :: a -> Identity a
+  //.
+  //. ```javascript
+  //. > Identity(42)
+  //. Identity(42)
+  //. ```
   function Identity(value) {
     if (!(this instanceof Identity)) return new Identity(value);
     this.value = value;
   }
 
   //# Identity.@@type :: String
+  //.
+  //. ```javascript
+  //. > Identity['@@type']
+  //. 'sanctuary-either/Identity'
+  //. ```
   Identity['@@type'] = 'sanctuary-either/Identity';
 
   //# Identity.fantasy-land/of :: a -> Identity a
+  //.
+  //. ```javascript
+  //. > Z.of(Identity, 42)
+  //. Identity(42)
+  //. ```
   Identity['fantasy-land/of'] = Identity;
 
   //# Identity#fantasy-land/equals :: Setoid a => Identity a ~> Identity a -> Boolean
+  //.
+  //. ```javascript
+  //. > Z.equals(Identity([1, 2, 3]), Identity([1, 2, 3]))
+  //. true
+  //.
+  //. > Z.equals(Identity([1, 2, 3]), Identity([3, 2, 1]))
+  //. false
+  //. ```
   Identity.prototype['fantasy-land/equals'] = function(other) {
     return Z.equals(this.value, other.value);
   };
 
   //# Identity#fantasy-land/lte :: Ord a => Identity a ~> Identity a -> Boolean
+  //.
+  //. ```javascript
+  //. > Z.lte(Identity(0), Identity(0))
+  //. true
+  //.
+  //. > Z.lte(Identity(0), Identity(1))
+  //. true
+  //.
+  //. > Z.lte(Identity(1), Identity(0))
+  //. false
+  //. ```
   Identity.prototype['fantasy-land/lte'] = function(other) {
     return Z.lte(this.value, other.value);
   };
 
   //# Identity#fantasy-land/concat :: Semigroup a => Identity a ~> Identity a -> Identity a
+  //.
+  //. ```javascript
+  //. > Z.concat(Identity([1, 2, 3]), Identity([4, 5, 6]))
+  //. Identity([1, 2, 3, 4, 5, 6])
+  //. ```
   Identity.prototype['fantasy-land/concat'] = function(other) {
     return Identity(Z.concat(this.value, other.value));
   };
 
   //# Identity#fantasy-land/map :: Identity a ~> (a -> b) -> Identity b
+  //.
+  //. ```javascript
+  //. > Z.map(Math.sqrt, Identity(64))
+  //. Identity(8)
+  //. ```
   Identity.prototype['fantasy-land/map'] = function(f) {
     return Identity(f(this.value));
   };
 
   //# Identity#fantasy-land/ap :: Identity a ~> Identity (a -> b) -> Identity b
+  //.
+  //. ```javascript
+  //. > Z.ap(Identity(Math.sqrt), Identity(64))
+  //. Identity(8)
+  //. ```
   Identity.prototype['fantasy-land/ap'] = function(other) {
     return Z.map(other.value, this);
   };
 
   //# Identity#fantasy-land/chain :: Identity a ~> (a -> Identity b) -> Identity b
+  //.
+  //. ```javascript
+  //. > Z.chain(n => Identity(n + 1), Identity(99))
+  //. Identity(100)
+  //. ```
   Identity.prototype['fantasy-land/chain'] = function(f) {
     return f(this.value);
   };
 
   //# Identity#fantasy-land/alt :: Alt a => Identity a ~> Identity a -> Identity a
+  //.
+  //. ```javascript
+  //. > Z.alt(Identity([1, 2, 3]), Identity([4, 5, 6]))
+  //. Identity([1, 2, 3, 4, 5, 6])
+  //. ```
   Identity.prototype['fantasy-land/alt'] = function(other) {
     return Identity(Z.alt(this.value, other.value));
   };
 
   //# Identity#fantasy-land/reduce :: Identity a ~> ((b, a) -> b, b) -> b
+  //.
+  //. ```javascript
+  //. > Z.reduce(Z.concat, [1, 2, 3], Identity([4, 5, 6]))
+  //. [1, 2, 3, 4, 5, 6]
+  //. ```
   Identity.prototype['fantasy-land/reduce'] = function(f, x) {
     return f(x, this.value);
   };
 
   //# Identity#fantasy-land/traverse :: Applicative f => Identity a ~> (TypeRep f, a -> f b) -> f (Identity b)
+  //.
+  //. ```javascript
+  //. > Z.traverse(Array, x => [x, x], Identity(0))
+  //. [Identity(0), Identity(0)]
+  //. ```
   Identity.prototype['fantasy-land/traverse'] = function(typeRep, f) {
     return Z.map(Identity, f(this.value));
   };
 
   //# Identity#fantasy-land/extend :: Identity a ~> (Identity a -> b) -> Identity b
+  //.
+  //. ```javascript
+  //. > Z.extend(identity => Z.extract(identity) + 1, Identity(99))
+  //. Identity(100)
+  //. ```
   Identity.prototype['fantasy-land/extend'] = function(f) {
     return Identity(f(this));
   };
 
   //# Identity#fantasy-land/extract :: Identity a ~> () -> a
+  //.
+  //. ```javascript
+  //. > Z.extract(Identity(42))
+  //. 42
+  //. ```
   Identity.prototype['fantasy-land/extract'] = function() {
     return this.value;
   };
 
   //# Identity#toString :: Identity a ~> () -> String
+  //.
+  //. ```javascript
+  //. Z.toString(Identity([1, 2, 3]))
+  //. 'Identity([1, 2, 3])'
+  //. ```
   Identity.prototype.inspect =
   Identity.prototype.toString = function() {
     return 'Identity(' + Z.toString(this.value) + ')';

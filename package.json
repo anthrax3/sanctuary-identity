@@ -14,6 +14,7 @@
     "sanctuary-type-classes": "4.0.x"
   },
   "devDependencies": {
+    "doctest": "0.12.x",
     "eslint": "3.19.x",
     "istanbul": "0.4.x",
     "mocha": "3.x.x",

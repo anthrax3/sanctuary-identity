@@ -7,13 +7,6 @@ var Z = require('sanctuary-type-classes');
 var Identity = require('..');
 
 
-//  lte :: Ord a => (a, a) -> Boolean
-Z.lte = function(a, b) {
-  return typeof a['fantasy-land/lte'] === 'function' ?
-    a['fantasy-land/lte'](b) :
-    a <= b;
-};
-
 //  eq :: (Any, Any) -> Undefined !
 function eq(actual, expected) {
   assert.strictEqual(arguments.length, eq.length);

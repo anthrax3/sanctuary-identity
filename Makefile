@@ -1,3 +1,4 @@
+DOCTEST = node_modules/.bin/doctest --module commonjs --prefix .
 ESLINT = node_modules/.bin/eslint --config node_modules/sanctuary-style/eslint-es3.json --env es3
 ISTANBUL = node_modules/.bin/istanbul
 NPM = npm
@@ -7,6 +8,15 @@ XYZ = node_modules/.bin/xyz --repo git@github.com:sanctuary-js/sanctuary-identit
 
 .PHONY: all
 all:
+
+
+.PHONY: doctest
+doctest:
+ifeq ($(shell node --version | cut -d . -f 1),v6)
+	$(DOCTEST) -- index.js
+else
+	@echo '[WARN] Doctests are only run in Node v6.x.x (current version is $(shell node --version))' >&2
+endif
 
 
 .PHONY: lint
@@ -33,3 +43,4 @@ setup:
 test:
 	$(ISTANBUL) cover node_modules/.bin/_mocha -- --ui tdd -- test/index.js
 	$(ISTANBUL) check-coverage --branches 100
+	make doctest
