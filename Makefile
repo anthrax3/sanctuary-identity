@@ -9,7 +9,13 @@ XYZ = node_modules/.bin/xyz --repo git@github.com:sanctuary-js/sanctuary-identit
 
 
 .PHONY: all
-all: README.md
+all: LICENSE README.md
+
+.PHONY: LICENSE
+LICENSE:
+	cp -- '$@' '$@.orig'
+	sed 's/Copyright (c) .* Sanctuary/Copyright (c) $(shell git log --date=short --pretty=format:%ad | sort -r | head -n 1 | cut -d - -f 1) Sanctuary/' '$@.orig' >'$@'
+	rm -- '$@.orig'
 
 README.md: README.md.tmp package.json scripts/version-urls
 	scripts/version-urls '$<' >'$@'
@@ -52,6 +58,11 @@ lint:
 	  --use remark-lint-no-unused-definitions \
 	  -- README.md
 	git checkout README.md
+
+
+.PHONY: release-major release-minor release-patch
+release-major release-minor release-patch:
+	@$(XYZ) --increment $(@:release-%=%)
 
 
 .PHONY: setup
