@@ -131,7 +131,7 @@ Identity(100)
 <h4 name="Identity.prototype.toString"><code><a href="https://github.com/sanctuary-js/sanctuary-identity/blob/v0.0.0/index.js#L209">Identity#toString :: Identity a ~> () -⁠> String</a></code></h4>
 
 ```javascript
-Z.toString(Identity([1, 2, 3]))
+> Z.toString(Identity([1, 2, 3]))
 'Identity([1, 2, 3])'
 ```
 

@@ -209,7 +209,7 @@
   //# Identity#toString :: Identity a ~> () -> String
   //.
   //. ```javascript
-  //. Z.toString(Identity([1, 2, 3]))
+  //. > Z.toString(Identity([1, 2, 3]))
   //. 'Identity([1, 2, 3])'
   //. ```
   Identity.prototype.inspect =
