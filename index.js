@@ -32,6 +32,11 @@
     return Z.equals(this.value, other.value);
   };
 
+  //# Identity#fantasy-land/lte :: Ord a => Identity a ~> Identity a -> Boolean
+  Identity.prototype['fantasy-land/lte'] = function(other) {
+    return Z.lte(this.value, other.value);
+  };
+
   //# Identity#fantasy-land/concat :: Semigroup a => Identity a ~> Identity a -> Identity a
   Identity.prototype['fantasy-land/concat'] = function(other) {
     return Identity(Z.concat(this.value, other.value));
