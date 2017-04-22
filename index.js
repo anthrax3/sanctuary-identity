@@ -57,6 +57,11 @@
     return f(this.value);
   };
 
+  //# Identity#fantasy-land/alt :: Alt a => Identity a ~> Identity a -> Identity a
+  Identity.prototype['fantasy-land/alt'] = function(other) {
+    return Identity(Z.alt(this.value, other.value));
+  };
+
   //# Identity#fantasy-land/reduce :: Identity a ~> ((b, a) -> b, b) -> b
   Identity.prototype['fantasy-land/reduce'] = function(f, x) {
     return f(x, this.value);
