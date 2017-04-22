@@ -1,0 +1,6 @@
+{
+  "name": "TK",
+  "dependencies": {
+    "sanctuary-type-classes": "4.0.x"
+  }
+}

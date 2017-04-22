@@ -11,9 +11,10 @@
     "test": "make lint test"
   },
   "dependencies": {
-    "sanctuary-type-classes": "3.0.x"
+    "sanctuary-type-classes": "4.0.x"
   },
   "devDependencies": {
+    "remember-bower": "0.1.x",
     "xyz": "2.1.x"
   }
 }
