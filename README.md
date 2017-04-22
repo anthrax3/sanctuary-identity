@@ -1,9 +1,9 @@
 # sanctuary-identity
 
+<img alt="Fantasy Land" src="https://raw.githubusercontent.com/fantasyland/fantasy-land/master/logo.png" width="200" height="200" align="right">
+
 Identity is the simplest container type: a value of type `Identity a`
 always contains exactly one value, of type `a`.
-
-<img alt="Fantasy Land" src="https://raw.githubusercontent.com/fantasyland/fantasy-land/master/logo.png" width="100" height="100">
 
 `Identity a` satisfies the following [Fantasy Land][] specifications:
 
