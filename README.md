@@ -32,7 +32,7 @@ Identity(42)
 
 ```javascript
 > Identity['@@type']
-'sanctuary-either/Identity'
+'sanctuary-identity/Identity'
 ```
 
 <h4 name="Identity.fantasy-land/of"><code><a href="https://github.com/sanctuary-js/sanctuary-identity/blob/v0.0.0/index.js#L82">Identity.fantasy-land/of :: a -⁠> Identity a</a></code></h4>
