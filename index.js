@@ -53,13 +53,6 @@
 
   'use strict';
 
-  //  lte :: Ord a => (a, a) -> Boolean
-  Z.lte = function(a, b) {
-    return typeof a['fantasy-land/lte'] === 'function' ?
-      a['fantasy-land/lte'](b) :
-      a <= b;
-  };
-
   //# Identity :: a -> Identity a
   //.
   //. ```javascript
