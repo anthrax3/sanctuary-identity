@@ -75,9 +75,9 @@
   //.
   //. ```javascript
   //. > Identity['@@type']
-  //. 'sanctuary-identity/Identity'
+  //. 'sanctuary-identity/Identity@1'
   //. ```
-  Identity['@@type'] = 'sanctuary-identity/Identity';
+  Identity['@@type'] = 'sanctuary-identity/Identity@1';
 
   //# Identity.fantasy-land/of :: a -> Identity a
   //.
