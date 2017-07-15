@@ -48,6 +48,7 @@ lint:
 	  -- index.js
 	$(ESLINT) \
 	  --env node \
+	  --global suite \
 	  --global test \
 	  -- test/index.js
 	$(REMEMBER_BOWER) $(shell pwd)

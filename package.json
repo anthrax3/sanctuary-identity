@@ -16,8 +16,10 @@
   "devDependencies": {
     "doctest": "0.12.x",
     "eslint": "3.19.x",
-    "fantasy-land": "3.2.0",
+    "fantasy-land": "3.3.0",
+    "fantasy-laws": "fantasyland/fantasy-laws#cec77b1100342babdd679008754d9abeb909355d",
     "istanbul": "0.4.x",
+    "jsverify": "0.8.x",
     "mocha": "3.x.x",
     "remark-cli": "3.x.x",
     "remark-lint-no-undefined-references": "1.x.x",
