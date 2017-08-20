@@ -1,6 +1,3 @@
-OWNER = sanctuary-js
-NAME = sanctuary-identity
-
 DOCTEST = node_modules/.bin/doctest --module commonjs --prefix .
 ISTANBUL = node_modules/.bin/istanbul
 NPM = npm
@@ -40,7 +37,7 @@ lint:
 	  --global test \
 	  -- test/index.js
 	node_modules/.bin/sanctuary-check-required-files
-	node_modules/.bin/sanctuary-lint-package-json '$(OWNER)' '$(NAME)'
+	node_modules/.bin/sanctuary-lint-package-json
 	node_modules/.bin/sanctuary-lint-bower-json
 	node_modules/.bin/sanctuary-lint-readme
 	node_modules/.bin/sanctuary-lint-commit-message
@@ -48,7 +45,7 @@ lint:
 
 .PHONY: release-major release-minor release-patch
 release-major release-minor release-patch:
-	@node_modules/.bin/sanctuary-release $(@:release-%=%) '$(OWNER)' '$(NAME)'
+	@node_modules/.bin/sanctuary-release $(@:release-%=%)
 
 
 .PHONY: setup

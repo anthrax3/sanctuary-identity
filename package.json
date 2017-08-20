@@ -20,7 +20,7 @@
     "istanbul": "0.4.x",
     "jsverify": "0.8.x",
     "mocha": "3.x.x",
-    "sanctuary-scripts": "sanctuary-js/sanctuary-scripts#faabfe2bb88a1c6fad35ab6c7a372afba07f6f97"
+    "sanctuary-scripts": "sanctuary-js/sanctuary-scripts#5d855ffb318f8ffd2748c7c7eedcb28c82396d16"
   },
   "files": [
     "/LICENSE",
