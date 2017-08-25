@@ -7,7 +7,7 @@
       "globals": {"define": false, "module": false, "require": false, "self": false}
     },
     {
-      "files": ["test/*.js"],
+      "files": ["test/**/*.js"],
       "env": {"node": true},
       "globals": {"suite": false, "test": false}
     }
