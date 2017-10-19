@@ -20,7 +20,7 @@
     "fantasy-land": "3.3.0",
     "fantasy-laws": "fantasyland/fantasy-laws#cec77b1100342babdd679008754d9abeb909355d",
     "jsverify": "0.8.x",
-    "sanctuary-scripts": "sanctuary-js/sanctuary-scripts#2dc804d475b9142807c9e382647f879295e2c20e"
+    "sanctuary-scripts": "sanctuary-js/sanctuary-scripts#9ca074ac7aa436b8d29bb3d4977b4112ddb40255"
   },
   "files": [
     "/LICENSE",
