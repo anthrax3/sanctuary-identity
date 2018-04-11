@@ -60,6 +60,10 @@ test('ap', function() {
   eq(Z.ap(Identity(Math.sqrt), Identity(9)))(Identity(3));
 });
 
+test('of', function() {
+  eq(Z.of(Identity, 42))(Identity(42));
+});
+
 test('chain', function() {
   eq(Z.chain(compose(Identity, Math.sqrt), Identity(9)))(Identity(3));
 });
