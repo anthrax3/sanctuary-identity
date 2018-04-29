@@ -42,14 +42,15 @@
 
   /* istanbul ignore else */
   if (typeof module === 'object' && typeof module.exports === 'object') {
-    module.exports = f(require('sanctuary-type-classes'));
+    module.exports = f(require('sanctuary-show'),
+                       require('sanctuary-type-classes'));
   } else if (typeof define === 'function' && define.amd != null) {
-    define(['sanctuary-type-classes'], f);
+    define(['sanctuary-show', 'sanctuary-type-classes'], f);
   } else {
-    self.sanctuaryIdentity = f(self.sanctuaryTypeClasses);
+    self.sanctuaryIdentity = f(self.sanctuaryShow, self.sanctuaryTypeClasses);
   }
 
-}(function(Z) {
+}(function(show, Z) {
 
   'use strict';
 
@@ -203,15 +204,15 @@
     return this.value;
   };
 
-  //# Identity#toString :: Identity a ~> () -> String
+  //# Identity#@@show :: Identity a ~> () -> String
   //.
   //. ```javascript
-  //. > Z.toString(Identity([1, 2, 3]))
-  //. 'Identity([1, 2, 3])'
+  //. > show(Identity([1, 2, 3]))
+  //. 'Identity ([1, 2, 3])'
   //. ```
   _Identity.prototype.inspect =
-  _Identity.prototype.toString = function() {
-    return 'Identity(' + Z.toString(this.value) + ')';
+  _Identity.prototype['@@show'] = function() {
+    return 'Identity (' + show(this.value) + ')';
   };
 
   return Identity;

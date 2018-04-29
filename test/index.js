@@ -4,6 +4,7 @@ var assert = require('assert');
 
 var laws = require('fantasy-laws');
 var jsc = require('jsverify');
+const show = require('sanctuary-show');
 var Z = require('sanctuary-type-classes');
 
 var Identity = require('..');
@@ -14,14 +15,14 @@ function eq(actual) {
   assert.strictEqual (arguments.length, eq.length);
   return function eq$1(expected) {
     assert.strictEqual (arguments.length, eq$1.length);
-    assert.strictEqual (Z.toString (actual), Z.toString (expected));
+    assert.strictEqual (show (actual), show (expected));
     assert.strictEqual (Z.equals (actual, expected), true);
   };
 }
 
 //  IdentityArb :: Arbitrary a -> Arbitrary (Identity a)
 function IdentityArb(arb) {
-  return arb.smap(Identity, value, Z.toString);
+  return arb.smap(Identity, value, show);
 }
 
 //  compose :: (b -> c, a -> b) -> a -> c
@@ -89,8 +90,8 @@ test('extract', function() {
   eq(Z.extract(Identity(0)))(0);
 });
 
-test('toString', function() {
-  eq(Z.toString(Identity([1, 2, 3])))('Identity([1, 2, 3])');
+test('@@show', function() {
+  eq(show(Identity([1, 2, 3])))('Identity ([1, 2, 3])');
 });
 
 suite('Comonad laws', function() {
