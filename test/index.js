@@ -162,6 +162,23 @@ suite ('Semigroup laws', () => {
   });
 });
 
+suite ('Filterable laws', () => {
+  testLaws (laws.Filterable (Z.equals)) ({
+    distributivity: [
+      IdentityArb (jsc.array (NumberArb)),
+      jsc.constant (x => x >= 0),
+      jsc.constant (isFinite),
+    ],
+    identity: [
+      IdentityArb (jsc.array (NumberArb)),
+    ],
+    annihilation: [
+      IdentityArb (jsc.array (NumberArb)),
+      IdentityArb (jsc.array (NumberArb)),
+    ],
+  });
+});
+
 suite ('Functor laws', () => {
   testLaws (laws.Functor (Z.equals)) ({
     identity: [
