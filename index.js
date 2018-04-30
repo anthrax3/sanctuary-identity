@@ -61,11 +61,7 @@
   //. Identity(42)
   //. ```
   function Identity(value) {
-    return new _Identity(value);
-  }
-
-  function _Identity(value) {
-    this.constructor = Identity;
+    if (!(this instanceof Identity)) return new Identity(value);
     this.value = value;
   }
 
@@ -94,7 +90,7 @@
   //. > Z.equals(Identity([1, 2, 3]), Identity([3, 2, 1]))
   //. false
   //. ```
-  _Identity.prototype['fantasy-land/equals'] = function(other) {
+  Identity.prototype['fantasy-land/equals'] = function(other) {
     return Z.equals(this.value, other.value);
   };
 
@@ -110,7 +106,7 @@
   //. > Z.lte(Identity(1), Identity(0))
   //. false
   //. ```
-  _Identity.prototype['fantasy-land/lte'] = function(other) {
+  Identity.prototype['fantasy-land/lte'] = function(other) {
     return Z.lte(this.value, other.value);
   };
 
@@ -120,7 +116,7 @@
   //. > Z.concat(Identity([1, 2, 3]), Identity([4, 5, 6]))
   //. Identity([1, 2, 3, 4, 5, 6])
   //. ```
-  _Identity.prototype['fantasy-land/concat'] = function(other) {
+  Identity.prototype['fantasy-land/concat'] = function(other) {
     return Identity(Z.concat(this.value, other.value));
   };
 
@@ -130,7 +126,7 @@
   //. > Z.map(Math.sqrt, Identity(64))
   //. Identity(8)
   //. ```
-  _Identity.prototype['fantasy-land/map'] = function(f) {
+  Identity.prototype['fantasy-land/map'] = function(f) {
     return Identity(f(this.value));
   };
 
@@ -140,7 +136,7 @@
   //. > Z.ap(Identity(Math.sqrt), Identity(64))
   //. Identity(8)
   //. ```
-  _Identity.prototype['fantasy-land/ap'] = function(other) {
+  Identity.prototype['fantasy-land/ap'] = function(other) {
     return Z.map(other.value, this);
   };
 
@@ -150,7 +146,7 @@
   //. > Z.chain(n => Identity(n + 1), Identity(99))
   //. Identity(100)
   //. ```
-  _Identity.prototype['fantasy-land/chain'] = function(f) {
+  Identity.prototype['fantasy-land/chain'] = function(f) {
     return f(this.value);
   };
 
@@ -160,7 +156,7 @@
   //. > Z.alt(Identity([1, 2, 3]), Identity([4, 5, 6]))
   //. Identity([1, 2, 3, 4, 5, 6])
   //. ```
-  _Identity.prototype['fantasy-land/alt'] = function(other) {
+  Identity.prototype['fantasy-land/alt'] = function(other) {
     return Identity(Z.alt(this.value, other.value));
   };
 
@@ -170,7 +166,7 @@
   //. > Z.reduce(Z.concat, [1, 2, 3], Identity([4, 5, 6]))
   //. [1, 2, 3, 4, 5, 6]
   //. ```
-  _Identity.prototype['fantasy-land/reduce'] = function(f, x) {
+  Identity.prototype['fantasy-land/reduce'] = function(f, x) {
     return f(x, this.value);
   };
 
@@ -180,7 +176,7 @@
   //. > Z.traverse(Array, x => [x, x], Identity(0))
   //. [Identity(0), Identity(0)]
   //. ```
-  _Identity.prototype['fantasy-land/traverse'] = function(typeRep, f) {
+  Identity.prototype['fantasy-land/traverse'] = function(typeRep, f) {
     return Z.map(Identity, f(this.value));
   };
 
@@ -190,7 +186,7 @@
   //. > Z.extend(identity => Z.extract(identity) + 1, Identity(99))
   //. Identity(100)
   //. ```
-  _Identity.prototype['fantasy-land/extend'] = function(f) {
+  Identity.prototype['fantasy-land/extend'] = function(f) {
     return Identity(f(this));
   };
 
@@ -200,7 +196,7 @@
   //. > Z.extract(Identity(42))
   //. 42
   //. ```
-  _Identity.prototype['fantasy-land/extract'] = function() {
+  Identity.prototype['fantasy-land/extract'] = function() {
     return this.value;
   };
 
@@ -210,8 +206,8 @@
   //. > show(Identity([1, 2, 3]))
   //. 'Identity ([1, 2, 3])'
   //. ```
-  _Identity.prototype.inspect =
-  _Identity.prototype['@@show'] = function() {
+  Identity.prototype.inspect =
+  Identity.prototype['@@show'] = function() {
     return 'Identity (' + show(this.value) + ')';
   };
 
