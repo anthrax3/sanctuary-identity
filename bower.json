@@ -20,7 +20,7 @@
   ],
   "dependencies": {
     "sanctuary-show": "1.0.x",
-    "sanctuary-type-classes": "7.1.x"
+    "sanctuary-type-classes": "8.2.0"
   },
   "ignore": [
     "/.circleci/",

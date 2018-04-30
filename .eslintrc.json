@@ -12,8 +12,9 @@
       }
     },
     {
-      "files": ["test/*.js"],
+      "files": ["test/**/*.js"],
       "rules": {
+        "comma-dangle": ["error", "always-multiline"],
         "func-call-spacing": ["error", "always", {"allowNewlines": true}],
         "func-style": ["error", "declaration", {"allowArrowFunctions": true}],
         "indent": ["off"],

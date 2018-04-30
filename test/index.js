@@ -23,8 +23,42 @@ function eq(actual) {
 //    IdentityArb :: Arbitrary a -> Arbitrary (Identity a)
 const IdentityArb = arb => arb.smap (Identity, value, show);
 
+//    NonEmpty :: Arbitrary a -> Arbitrary (NonEmpty a)
+const NonEmpty = arb => jsc.suchthat (arb, x => not (empty (x)));
+
+//    NumberArb :: Arbitrary Number
+const NumberArb = jsc.oneof (
+  jsc.constant (NaN),
+  jsc.constant (-Infinity),
+  jsc.constant (Number.MIN_SAFE_INTEGER),
+  jsc.constant (-10000),
+  jsc.constant (-9999),
+  jsc.constant (-0.5),
+  jsc.constant (-0),
+  jsc.constant (0),
+  jsc.constant (0.5),
+  jsc.constant (9999),
+  jsc.constant (10000),
+  jsc.constant (Number.MAX_SAFE_INTEGER),
+  jsc.constant (Infinity)
+);
+
 //    compose :: (b -> c) -> (a -> b) -> a -> c
 const compose = f => g => x => f (g (x));
+
+//    empty :: Monoid m => m -> Boolean
+const empty = m => Z.equals (m, Z.empty (m.constructor));
+
+//    not :: Boolean -> Boolean
+const not = b => !b;
+
+//    testLaws :: Object -> Object -> Undefined
+const testLaws = laws => arbs => {
+  (Object.keys (laws)).forEach (name => {
+    test (name.replace (/[A-Z]/g, c => ' ' + c.toLowerCase ()),
+          laws[name].apply (laws, arbs[name]));
+  });
+};
 
 //    value :: { value :: a } -> a
 const value = r => r.value;
@@ -61,10 +95,6 @@ test ('chain', () => {
   eq (Z.chain (compose (Identity) (Math.sqrt), Identity (9))) (Identity (3));
 });
 
-test ('alt', () => {
-  eq (Z.alt (Identity ([1, 2]), Identity ([3, 4]))) (Identity ([1, 2, 3, 4]));
-});
-
 test ('reduce', () => {
   eq (Z.reduce (Z.concat, [1, 2], Identity ([3, 4]))) ([1, 2, 3, 4]);
 });
@@ -86,17 +116,161 @@ test ('@@show', () => {
   eq (show (Identity ([1, 2, 3]))) ('Identity ([1, 2, 3])');
 });
 
+suite ('Setoid laws', () => {
+  testLaws (laws.Setoid) ({
+    reflexivity: [
+      IdentityArb (NumberArb),
+    ],
+    symmetry: [
+      IdentityArb (NumberArb),
+      IdentityArb (NumberArb),
+    ],
+    transitivity: [
+      IdentityArb (NumberArb),
+      IdentityArb (NumberArb),
+      IdentityArb (NumberArb),
+    ],
+  });
+});
+
+suite ('Ord laws', () => {
+  testLaws (laws.Ord) ({
+    totality: [
+      IdentityArb (NumberArb),
+      IdentityArb (NumberArb),
+    ],
+    antisymmetry: [
+      IdentityArb (NumberArb),
+      IdentityArb (NumberArb),
+      IdentityArb (NumberArb),
+    ],
+    transitivity: [
+      IdentityArb (NumberArb),
+      IdentityArb (NumberArb),
+      IdentityArb (NumberArb),
+    ],
+  });
+});
+
+suite ('Semigroup laws', () => {
+  testLaws (laws.Semigroup (Z.equals)) ({
+    associativity: [
+      IdentityArb (jsc.string),
+      IdentityArb (jsc.string),
+      IdentityArb (jsc.string),
+    ],
+  });
+});
+
+suite ('Functor laws', () => {
+  testLaws (laws.Functor (Z.equals)) ({
+    identity: [
+      IdentityArb (NumberArb),
+    ],
+    composition: [
+      IdentityArb (NumberArb),
+      jsc.constant (Math.sqrt),
+      jsc.constant (Math.abs),
+    ],
+  });
+});
+
+suite ('Apply laws', () => {
+  testLaws (laws.Apply (Z.equals)) ({
+    composition: [
+      IdentityArb (jsc.constant (Math.sqrt)),
+      IdentityArb (jsc.constant (Math.abs)),
+      IdentityArb (NumberArb),
+    ],
+  });
+});
+
+suite ('Applicative laws', () => {
+  testLaws (laws.Applicative (Z.equals, Identity)) ({
+    identity: [
+      IdentityArb (NumberArb),
+    ],
+    homomorphism: [
+      jsc.constant (Math.abs),
+      NumberArb,
+    ],
+    interchange: [
+      IdentityArb (jsc.constant (Math.abs)),
+      NumberArb,
+    ],
+  });
+});
+
+suite ('Chain laws', () => {
+  testLaws (laws.Chain (Z.equals)) ({
+    associativity: [
+      IdentityArb (jsc.asciistring),
+      jsc.constant (s => Identity (s.replace (/[A-Z]/g, ''))),
+      jsc.constant (s => Identity (s.toUpperCase ())),
+    ],
+  });
+});
+
+suite ('Monad laws', () => {
+  testLaws (laws.Monad (Z.equals, Identity)) ({
+    leftIdentity: [
+      jsc.constant (x => Identity ([x, x])),
+      IdentityArb (NumberArb),
+    ],
+    rightIdentity: [
+      IdentityArb (NumberArb),
+    ],
+  });
+});
+
+suite ('Foldable laws', () => {
+  testLaws (laws.Foldable (Z.equals)) ({
+    associativity: [
+      jsc.constant (Z.concat),
+      jsc.string,
+      IdentityArb (jsc.string),
+    ],
+  });
+});
+
+suite ('Traversable laws', () => {
+  testLaws (laws.Traversable (Z.equals)) ({
+    naturality: [
+      jsc.constant (Array),
+      jsc.constant (Identity),
+      jsc.constant (xs => Identity (xs[0])),
+      IdentityArb (NonEmpty (jsc.array (NumberArb))),
+    ],
+    identity: [
+      jsc.constant (Array),
+      IdentityArb (NumberArb),
+    ],
+    composition: [
+      jsc.constant (Array),
+      jsc.constant (Identity),
+      IdentityArb (jsc.array (IdentityArb (NumberArb))),
+    ],
+  });
+});
+
+suite ('Extend laws', () => {
+  testLaws (laws.Extend (Z.equals)) ({
+    associativity: [
+      IdentityArb (jsc.integer),
+      jsc.constant (identity => Z.extract (identity) + 1),
+      jsc.constant (identity => Math.pow (Z.extract (identity), 2)),
+    ],
+  });
+});
+
 suite ('Comonad laws', () => {
-
-  test ('left identity',
-        (laws.Comonad (Z.equals)).leftIdentity (
-          IdentityArb (jsc.integer)
-        ));
-
-  test ('right identity',
-        (laws.Comonad (Z.equals)).rightIdentity (
-          IdentityArb (jsc.integer),
-          jsc.constant (identity => identity.value + 1)
-        ));
-
+  testLaws (laws.Comonad (Z.equals)) ({
+    leftIdentity: [
+      IdentityArb (NumberArb),
+    ],
+    rightIdentity: [
+      IdentityArb (NumberArb),
+      jsc.constant (identity => Math.pow (Z.extract (identity), 2)),
+    ],
+  });
 });

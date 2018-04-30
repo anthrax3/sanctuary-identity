@@ -30,11 +30,10 @@
 //.   - [Applicative][]
 //.   - [Chain][]
 //.   - [Monad][]
-//.   - [Alt][] (if `a` satisfies Alt)
 //.   - [Foldable][]
 //.   - [Traversable][]
 //.   - [Extend][]
-//.   - [Extract][]
+//.   - [Comonad][]
 
 (function(f) {
 
@@ -150,16 +149,6 @@
     return f(this.value);
   };
 
-  //# Identity#fantasy-land/alt :: Alt a => Identity a ~> Identity a -> Identity a
-  //.
-  //. ```javascript
-  //. > Z.alt(Identity([1, 2, 3]), Identity([4, 5, 6]))
-  //. Identity([1, 2, 3, 4, 5, 6])
-  //. ```
-  Identity.prototype['fantasy-land/alt'] = function(other) {
-    return Identity(Z.alt(this.value, other.value));
-  };
-
   //# Identity#fantasy-land/reduce :: Identity a ~> ((b, a) -> b, b) -> b
   //.
   //. ```javascript
@@ -215,12 +204,11 @@
 
 }));
 
-//. [Alt]:              v:fantasyland/fantasy-land#alt
 //. [Applicative]:      v:fantasyland/fantasy-land#applicative
 //. [Apply]:            v:fantasyland/fantasy-land#apply
 //. [Chain]:            v:fantasyland/fantasy-land#chain
+//. [Comonad]:          v:fantasyland/fantasy-land#comonad
 //. [Extend]:           v:fantasyland/fantasy-land#extend
-//. [Extract]:          v:fantasyland/fantasy-land#extract
 //. [Fantasy Land]:     v:fantasyland/fantasy-land
 //. [Foldable]:         v:fantasyland/fantasy-land#foldable
 //. [Functor]:          v:fantasyland/fantasy-land#functor
