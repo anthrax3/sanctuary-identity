@@ -14,9 +14,12 @@
     {
       "files": ["test/*.js"],
       "rules": {
-        "func-call-spacing": ["off"],
+        "func-call-spacing": ["error", "always", {"allowNewlines": true}],
+        "func-style": ["error", "declaration", {"allowArrowFunctions": true}],
         "indent": ["off"],
-        "no-unexpected-multiline": ["off"]
+        "no-extra-parens": ["off"],
+        "no-unexpected-multiline": ["off"],
+        "no-var": ["error"]
       }
     }
   ]
