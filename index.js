@@ -25,7 +25,6 @@
 //.   - [Setoid][] (if `a` satisfies Setoid)
 //.   - [Ord][] (if `a` satisfies Ord)
 //.   - [Semigroup][] (if `a` satisfies Semigroup)
-//.   - [Filterable][] (if `a` satisfies Filterable)
 //.   - [Functor][]
 //.   - [Apply][]
 //.   - [Applicative][]
@@ -59,8 +58,7 @@
   var predicates = {
     'fantasy-land/equals': Z.Setoid.test,
     'fantasy-land/lte': Z.Ord.test,
-    'fantasy-land/concat': Z.Semigroup.test,
-    'fantasy-land/filter': Z.Filterable.test
+    'fantasy-land/concat': Z.Semigroup.test
   };
 
   //# Identity :: a -> Identity a
@@ -136,16 +134,6 @@
   //. ```
   methods['fantasy-land/concat'] = function(other) {
     return Identity(Z.concat(this.value, other.value));
-  };
-
-  //# Identity#fantasy-land/filter :: Filterable f => Identity (f a) ~> (a -> Boolean) -> Identity (f a)
-  //.
-  //. ```javascript
-  //. > Z.filter (s => /[xyz]/.test (s), Identity (['foo', 'bar', 'baz', 'quux']))
-  //. Identity (['baz', 'quux'])
-  //. ```
-  methods['fantasy-land/filter'] = function(pred) {
-    return Identity(Z.filter(pred, this.value));
   };
 
   //# Identity#fantasy-land/map :: Identity a ~> (a -> b) -> Identity b
@@ -238,7 +226,6 @@
 //. [Comonad]:          v:fantasyland/fantasy-land#comonad
 //. [Extend]:           v:fantasyland/fantasy-land#extend
 //. [Fantasy Land]:     v:fantasyland/fantasy-land
-//. [Filterable]:       v:fantasyland/fantasy-land#filterable
 //. [Foldable]:         v:fantasyland/fantasy-land#foldable
 //. [Functor]:          v:fantasyland/fantasy-land#functor
 //. [Monad]:            v:fantasyland/fantasy-land#monad

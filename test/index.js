@@ -117,9 +117,7 @@ suite ('type-class predicates', () => {
     eq (Z.Group.test (Identity ([]))) (false);
   });
   test ('Filterable', () => {
-    eq (Z.Filterable.test (Identity (Useless))) (false);
-    eq (Z.Filterable.test (Identity (0))) (false);
-    eq (Z.Filterable.test (Identity ([]))) (true);
+    eq (Z.Filterable.test (Identity ([]))) (false);
   });
   test ('Functor', () => {
     eq (Z.Functor.test (Identity (Useless))) (true);
@@ -213,23 +211,6 @@ suite ('Semigroup laws', () => {
       IdentityArb (jsc.string),
       IdentityArb (jsc.string),
       IdentityArb (jsc.string),
-    ],
-  });
-});
-
-suite ('Filterable laws', () => {
-  testLaws (laws.Filterable (Z.equals)) ({
-    distributivity: [
-      IdentityArb (jsc.array (NumberArb)),
-      jsc.constant (x => x >= 0),
-      jsc.constant (isFinite),
-    ],
-    identity: [
-      IdentityArb (jsc.array (NumberArb)),
-    ],
-    annihilation: [
-      IdentityArb (jsc.array (NumberArb)),
-      IdentityArb (jsc.array (NumberArb)),
     ],
   });
 });
