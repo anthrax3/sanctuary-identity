@@ -8,6 +8,7 @@
       "env": {"es6": true},
       "globals": {"Identity": false, "Z": false, "show": false},
       "rules": {
+        "func-call-spacing": ["error", "always", {"allowNewlines": true}],
         "strict": ["off"]
       }
     },
