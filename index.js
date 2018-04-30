@@ -62,7 +62,23 @@
   //. ```
   function Identity(value) {
     if (!(this instanceof Identity)) return new Identity(value);
+
     this.value = value;
+
+    if (Z.Setoid.test(value)) {
+      this['fantasy-land/equals'] = Identity$prototype$equals;
+      if (Z.Ord.test(value)) {
+        this['fantasy-land/lte'] = Identity$prototype$lte;
+      }
+    }
+
+    if (Z.Semigroup.test(value)) {
+      this['fantasy-land/concat'] = Identity$prototype$concat;
+    }
+
+    if (Z.Filterable.test(value)) {
+      this['fantasy-land/filter'] = Identity$prototype$filter;
+    }
   }
 
   //# Identity.@@type :: String
@@ -90,9 +106,9 @@
   //. > Z.equals (Identity ([1, 2, 3]), Identity ([3, 2, 1]))
   //. false
   //. ```
-  Identity.prototype['fantasy-land/equals'] = function(other) {
+  function Identity$prototype$equals(other) {
     return Z.equals(this.value, other.value);
-  };
+  }
 
   //# Identity#fantasy-land/lte :: Ord a => Identity a ~> Identity a -> Boolean
   //.
@@ -106,9 +122,9 @@
   //. > Z.lte (Identity (1), Identity (0))
   //. false
   //. ```
-  Identity.prototype['fantasy-land/lte'] = function(other) {
+  function Identity$prototype$lte(other) {
     return Z.lte(this.value, other.value);
-  };
+  }
 
   //# Identity#fantasy-land/concat :: Semigroup a => Identity a ~> Identity a -> Identity a
   //.
@@ -116,9 +132,9 @@
   //. > Z.concat (Identity ([1, 2, 3]), Identity ([4, 5, 6]))
   //. Identity ([1, 2, 3, 4, 5, 6])
   //. ```
-  Identity.prototype['fantasy-land/concat'] = function(other) {
+  function Identity$prototype$concat(other) {
     return Identity(Z.concat(this.value, other.value));
-  };
+  }
 
   //# Identity#fantasy-land/filter :: Filterable f => Identity (f a) ~> (a -> Boolean) -> Identity (f a)
   //.
@@ -126,9 +142,9 @@
   //. > Z.filter (s => /[xyz]/.test (s), Identity (['foo', 'bar', 'baz', 'quux']))
   //. Identity (['baz', 'quux'])
   //. ```
-  Identity.prototype['fantasy-land/filter'] = function(pred) {
+  function Identity$prototype$filter(pred) {
     return Identity(Z.filter(pred, this.value));
-  };
+  }
 
   //# Identity#fantasy-land/map :: Identity a ~> (a -> b) -> Identity b
   //.

@@ -1,5 +1,7 @@
 'use strict';
 
+const assert = require ('assert');
+
 const laws = require ('fantasy-laws');
 const jsc = require ('jsverify');
 const show = require ('sanctuary-show');
@@ -31,6 +33,13 @@ const NumberArb = jsc.oneof (
   jsc.constant (Infinity)
 );
 
+//    Useless :: Useless
+const Useless = {
+  'constructor': {'@@type': 'sanctuary-identity/Useless@1'},
+  'inspect': function() { return 'Useless'; },
+  '@@show': function() { return 'Useless'; },
+};
+
 //    empty :: Monoid m => m -> Boolean
 const empty = m => Z.equals (m, Z.empty (m.constructor));
 
@@ -45,6 +54,98 @@ const testLaws = laws => arbs => {
   });
 };
 
+//    eq :: a -> b -> Undefined !
+function eq(actual) {
+  assert.strictEqual (arguments.length, eq.length);
+  return function eq$1(expected) {
+    assert.strictEqual (arguments.length, eq$1.length);
+    assert.strictEqual (show (actual), show (expected));
+    assert.strictEqual (Z.equals (actual, expected), true);
+  };
+}
+
+
+suite ('type-class predicates', () => {
+  test ('Setoid', () => {
+    eq (Z.Setoid.test (Identity (Useless))) (false);
+    eq (Z.Setoid.test (Identity (/(?:)/))) (true);
+  });
+  test ('Ord', () => {
+    eq (Z.Ord.test (Identity (Useless))) (false);
+    eq (Z.Ord.test (Identity (/(?:)/))) (false);
+    eq (Z.Ord.test (Identity (0))) (true);
+  });
+  test ('Semigroupoid', () => {
+    eq (Z.Semigroupoid.test (Identity ([]))) (false);
+  });
+  test ('Category', () => {
+    eq (Z.Category.test (Identity ([]))) (false);
+  });
+  test ('Semigroup', () => {
+    eq (Z.Semigroup.test (Identity (Useless))) (false);
+    eq (Z.Semigroup.test (Identity (0))) (false);
+    eq (Z.Semigroup.test (Identity ([]))) (true);
+  });
+  test ('Monoid', () => {
+    eq (Z.Monoid.test (Identity ([]))) (false);
+  });
+  test ('Group', () => {
+    eq (Z.Group.test (Identity ([]))) (false);
+  });
+  test ('Filterable', () => {
+    eq (Z.Filterable.test (Identity (Useless))) (false);
+    eq (Z.Filterable.test (Identity (0))) (false);
+    eq (Z.Filterable.test (Identity ([]))) (true);
+  });
+  test ('Functor', () => {
+    eq (Z.Functor.test (Identity (Useless))) (true);
+  });
+  test ('Bifunctor', () => {
+    eq (Z.Bifunctor.test (Identity ([]))) (false);
+  });
+  test ('Profunctor', () => {
+    eq (Z.Profunctor.test (Identity (Math.sqrt))) (false);
+  });
+  test ('Apply', () => {
+    eq (Z.Apply.test (Identity (Useless))) (true);
+  });
+  test ('Applicative', () => {
+    eq (Z.Applicative.test (Identity (Useless))) (true);
+  });
+  test ('Chain', () => {
+    eq (Z.Chain.test (Identity (Useless))) (true);
+  });
+  test ('ChainRec', () => {
+    eq (Z.ChainRec.test (Identity ([]))) (false);
+  });
+  test ('Monad', () => {
+    eq (Z.Monad.test (Identity (Useless))) (true);
+  });
+  test ('Alt', () => {
+    eq (Z.Alt.test (Identity ([]))) (false);
+  });
+  test ('Plus', () => {
+    eq (Z.Plus.test (Identity ([]))) (false);
+  });
+  test ('Alternative', () => {
+    eq (Z.Alternative.test (Identity ([]))) (false);
+  });
+  test ('Foldable', () => {
+    eq (Z.Foldable.test (Identity (Useless))) (true);
+  });
+  test ('Traversable', () => {
+    eq (Z.Traversable.test (Identity (Useless))) (true);
+  });
+  test ('Extend', () => {
+    eq (Z.Extend.test (Identity (Useless))) (true);
+  });
+  test ('Comonad', () => {
+    eq (Z.Comonad.test (Identity (Useless))) (true);
+  });
+  test ('Contravariant', () => {
+    eq (Z.Contravariant.test (Identity (Math.sqrt))) (false);
+  });
+});
 
 suite ('Setoid laws', () => {
   testLaws (laws.Setoid) ({
