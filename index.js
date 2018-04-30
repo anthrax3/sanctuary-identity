@@ -165,7 +165,7 @@
   //. Identity (8)
   //. ```
   methods['fantasy-land/ap'] = function(other) {
-    return Z.map(other.value, this);
+    return Identity(other.value(this.value));
   };
 
   //# Identity#fantasy-land/chain :: Identity a ~> (a -> Identity b) -> Identity b
