@@ -6,6 +6,7 @@ const laws = require ('fantasy-laws');
 const jsc = require ('jsverify');
 const show = require ('sanctuary-show');
 const Z = require ('sanctuary-type-classes');
+const type = require ('sanctuary-type-identifiers');
 
 const Identity = require ('..');
 
@@ -64,6 +65,29 @@ function eq(actual) {
   };
 }
 
+
+suite ('Identity', () => {
+  test ('metadata', () => {
+    eq (typeof Identity) ('function');
+    eq (Identity.name) ('Identity');
+    eq (Identity.length) (1);
+  });
+  test ('@@type', () => {
+    eq (type (Identity (0))) ('sanctuary-identity/Identity@1');
+    eq (type.parse (type (Identity (0))))
+       ({namespace: 'sanctuary-identity', name: 'Identity', version: 1});
+  });
+  test ('@@show', () => {
+    eq (show (Identity (['foo', 'bar', 'baz'])))
+       ('Identity (["foo", "bar", "baz"])');
+    eq (show (Identity (Identity (Identity (-0)))))
+       ('Identity (Identity (Identity (-0)))');
+  });
+  test ('inspect', () => {
+    eq ((Identity (['foo', 'bar', 'baz'])).inspect ())
+       ('Identity (["foo", "bar", "baz"])');
+  });
+});
 
 suite ('type-class predicates', () => {
   test ('Setoid', () => {

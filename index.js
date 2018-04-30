@@ -54,6 +54,15 @@
 
   'use strict';
 
+  var methods = {};
+
+  var predicates = {
+    'fantasy-land/equals': Z.Setoid.test,
+    'fantasy-land/lte': Z.Ord.test,
+    'fantasy-land/concat': Z.Semigroup.test,
+    'fantasy-land/filter': Z.Filterable.test
+  };
+
   //# Identity :: a -> Identity a
   //.
   //. ```javascript
@@ -61,24 +70,17 @@
   //. Identity (42)
   //. ```
   function Identity(value) {
-    if (!(this instanceof Identity)) return new Identity(value);
+    var identity = {constructor: Identity, value: value};
 
-    this.value = value;
-
-    if (Z.Setoid.test(value)) {
-      this['fantasy-land/equals'] = Identity$prototype$equals;
-      if (Z.Ord.test(value)) {
-        this['fantasy-land/lte'] = Identity$prototype$lte;
+    Object.keys(methods).forEach(function(name) {
+      if (!(name in predicates) || predicates[name](value)) {
+        identity[name] = methods[name];
       }
-    }
+    });
 
-    if (Z.Semigroup.test(value)) {
-      this['fantasy-land/concat'] = Identity$prototype$concat;
-    }
+    identity.inspect = identity['@@show'];
 
-    if (Z.Filterable.test(value)) {
-      this['fantasy-land/filter'] = Identity$prototype$filter;
-    }
+    return identity;
   }
 
   //# Identity.@@type :: String
@@ -106,9 +108,9 @@
   //. > Z.equals (Identity ([1, 2, 3]), Identity ([3, 2, 1]))
   //. false
   //. ```
-  function Identity$prototype$equals(other) {
+  methods['fantasy-land/equals'] = function(other) {
     return Z.equals(this.value, other.value);
-  }
+  };
 
   //# Identity#fantasy-land/lte :: Ord a => Identity a ~> Identity a -> Boolean
   //.
@@ -122,9 +124,9 @@
   //. > Z.lte (Identity (1), Identity (0))
   //. false
   //. ```
-  function Identity$prototype$lte(other) {
+  methods['fantasy-land/lte'] = function(other) {
     return Z.lte(this.value, other.value);
-  }
+  };
 
   //# Identity#fantasy-land/concat :: Semigroup a => Identity a ~> Identity a -> Identity a
   //.
@@ -132,9 +134,9 @@
   //. > Z.concat (Identity ([1, 2, 3]), Identity ([4, 5, 6]))
   //. Identity ([1, 2, 3, 4, 5, 6])
   //. ```
-  function Identity$prototype$concat(other) {
+  methods['fantasy-land/concat'] = function(other) {
     return Identity(Z.concat(this.value, other.value));
-  }
+  };
 
   //# Identity#fantasy-land/filter :: Filterable f => Identity (f a) ~> (a -> Boolean) -> Identity (f a)
   //.
@@ -142,9 +144,9 @@
   //. > Z.filter (s => /[xyz]/.test (s), Identity (['foo', 'bar', 'baz', 'quux']))
   //. Identity (['baz', 'quux'])
   //. ```
-  function Identity$prototype$filter(pred) {
+  methods['fantasy-land/filter'] = function(pred) {
     return Identity(Z.filter(pred, this.value));
-  }
+  };
 
   //# Identity#fantasy-land/map :: Identity a ~> (a -> b) -> Identity b
   //.
@@ -152,7 +154,7 @@
   //. > Z.map (Math.sqrt, Identity (64))
   //. Identity (8)
   //. ```
-  Identity.prototype['fantasy-land/map'] = function(f) {
+  methods['fantasy-land/map'] = function(f) {
     return Identity(f(this.value));
   };
 
@@ -162,7 +164,7 @@
   //. > Z.ap (Identity (Math.sqrt), Identity (64))
   //. Identity (8)
   //. ```
-  Identity.prototype['fantasy-land/ap'] = function(other) {
+  methods['fantasy-land/ap'] = function(other) {
     return Z.map(other.value, this);
   };
 
@@ -172,7 +174,7 @@
   //. > Z.chain (n => Identity (n + 1), Identity (99))
   //. Identity (100)
   //. ```
-  Identity.prototype['fantasy-land/chain'] = function(f) {
+  methods['fantasy-land/chain'] = function(f) {
     return f(this.value);
   };
 
@@ -182,7 +184,7 @@
   //. > Z.reduce (Z.concat, [1, 2, 3], Identity ([4, 5, 6]))
   //. [1, 2, 3, 4, 5, 6]
   //. ```
-  Identity.prototype['fantasy-land/reduce'] = function(f, x) {
+  methods['fantasy-land/reduce'] = function(f, x) {
     return f(x, this.value);
   };
 
@@ -192,7 +194,7 @@
   //. > Z.traverse (Array, x => [x, x], Identity (0))
   //. [Identity (0), Identity (0)]
   //. ```
-  Identity.prototype['fantasy-land/traverse'] = function(typeRep, f) {
+  methods['fantasy-land/traverse'] = function(typeRep, f) {
     return Z.map(Identity, f(this.value));
   };
 
@@ -202,7 +204,7 @@
   //. > Z.extend (identity => Z.extract (identity) + 1, Identity (99))
   //. Identity (100)
   //. ```
-  Identity.prototype['fantasy-land/extend'] = function(f) {
+  methods['fantasy-land/extend'] = function(f) {
     return Identity(f(this));
   };
 
@@ -212,7 +214,7 @@
   //. > Z.extract (Identity (42))
   //. 42
   //. ```
-  Identity.prototype['fantasy-land/extract'] = function() {
+  methods['fantasy-land/extract'] = function() {
     return this.value;
   };
 
@@ -222,8 +224,7 @@
   //. > show (Identity ([1, 2, 3]))
   //. 'Identity ([1, 2, 3])'
   //. ```
-  Identity.prototype.inspect =
-  Identity.prototype['@@show'] = function() {
+  methods['@@show'] = function() {
     return 'Identity (' + show(this.value) + ')';
   };
 
